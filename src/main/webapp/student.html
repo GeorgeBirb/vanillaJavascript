@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Student</title>
+</head>
+
+<body>
+<!--Welcome Message-->
+<div id="welcomeDiv" style="width:800px; margin:0 auto;">
+    <form id="welcomeForm">
+        <button
+                class="button"
+                onclick="return closeDialog()">
+            Welcome!!
+            <br>
+            Please Enter!
+        </button>
+    </form>
+</div>
+
+<div id="mainDiv">
+    <!-- Check for characters inserted, capitalization of 1st letter and min-max values-->
+    <!-- Insert Form-->
+    <form id="studentForm">
+        <label for="nameID" style="color: white;"><b>Name:</b></label>
+        <br>
+        <input id="nameID"
+               type="text"
+               onkeydown="return /[A-Z,Α-Ω,Ά-Ώ,,a-z,α-ω,ά-ώ,-,-,',']/i.test(event.key)"
+               onblur="passNameValue(this);"
+               style="text-transform: capitalize;"
+               placeholder="Εισάγετε το Όνομα"
+               name="name">
+        <br>
+        <label for="surnameID" style="color: white"><b>Surname:</b></label>
+        <br>
+        <input id="surnameID"
+               type="text"
+               onkeydown="return /[A-Z,Α-Ω,Ά-Ώ,,a-z,α-ω,ά-ώ,-,-,',']/i.test(event.key)"
+               onblur="passSurnameValue(this);"
+               style="text-transform: capitalize;"
+               placeholder="Εισάγετε το Επώνυμο"
+               name="surname">
+        <br>
+        <label for="numMathsID" style="color: white"><b>Maths:</b></label>
+        <br>
+        <input id="numMathsID"
+               type="number"
+               min="0"
+               max="100"
+               onkeydown="return /[0,1,2,3,4,5,6,7,8,9]/i.test(event.key)"
+               onblur="passMathsValue(this);"
+               placeholder="Εύρος τιμών : 1-100"
+               name="numMaths">
+        <br>
+        <label for="numCID" style="color: white"><b>C#:</b></label>
+        <br>
+        <input id="numCID"
+               type="number"
+               min="0"
+               max="100"
+               onkeydown="return /[0,1,2,3,4,5,6,7,8,9]/i.test(event.key)"
+               onblur="passCValue(this);"
+               placeholder="Εύρος τιμών : 1-100"
+               name="numC">
+        <br>
+        <label for="numJSID" style="color: white"><b>Javascript:</b></label>
+        <br>
+        <input id="numJSID"
+               type="number"
+               min="0"
+               max="100"
+               onkeydown="return /[0,1,2,3,4,5,6,7,8,9]/i.test(event.key)"
+               onblur="passJSValue(this);"
+               placeholder="Εύρος τιμών : 1-100"
+               name="numJS">
+        <br>
+        <label for="numJavaID" style="color: white"><b>Java:</b></label>
+        <br>
+        <input id="numJavaID"
+               type="number"
+               min="0"
+               max="100"
+               onkeydown="return /[0,1,2,3,4,5,6,7,8,9]/i.test(event.key)"
+               onblur="passJavaValue(this);"
+               placeholder="Εύρος τιμών : 1-100"
+               name="numJava">
+
+        <br>
+        <br>
+
+        <button id="register"
+                class="button"
+                onclick="return registerStudent();">
+            Register
+        </button>
+
+        <button id="display"
+                class="button"
+                onclick="return displayStudents()">
+            Display
+        </button>
+
+        <br>
+        <br>
+
+        <center>
+            <b>
+                <p id="result" class="parStyle" style="color: white">
+                    No Records, yet!!
+                </p>
+            </b>
+        </center>
+
+    </form>
+</div>
+
+<!--------------------------------JAVASCRIPT-------------------------------------->
+<script>
+    document.getElementById("mainDiv").style.display = "none";
+    // Create and initialize a global value of Student (registeredStudent)
+    var registeredStudent = new student("", "", "", "", "", "", "");
+    // Create and initialize a global value of Student Array (studentArray)
+    var studentArray = [];
+
+    // Object constructor function for Student Object
+    function student(name, surname, maths, c, js, java, avgScore) {
+        this.name = name;
+        this.surname = surname;
+        this.maths = maths;
+        this.c = c;
+        this.js = js;
+        this.java = java;
+        this.avgScore = avgScore;
+    }
+
+    function registerStudent() {
+        // validation that user has not empty values
+        if (registeredStudent.name == "" || registeredStudent.name == null ||
+            registeredStudent.surname == "" || registeredStudent.surname == null ||
+            registeredStudent.js == "" || registeredStudent.js == null ||
+            registeredStudent.java == "" || registeredStudent.java == null ||
+            registeredStudent.maths == "" || registeredStudent.maths == null ||
+            registeredStudent.c == "" || registeredStudent.c == null) {
+            alert("Please fill the empty fields!!")
+            return false;
+        }
+
+        // validation that user has not inserted score more than 100
+        if (registeredStudent.js > 100 ||
+            registeredStudent.java > 100 ||
+            registeredStudent.maths > 100 ||
+            registeredStudent.c > 100) {
+            alert("Score must be limited from 0 to 100 points!!")
+            return false;
+        }
+
+        // calculating AVG score while IntParsing the String Values
+        registeredStudent.avgScore = (parseInt(registeredStudent.maths)
+            + parseInt(registeredStudent.java)
+            + parseInt(registeredStudent.js)
+            + parseInt(registeredStudent.c)) / 4;
+
+        // pushing the student Object to the Array
+        studentArray.push(registeredStudent);
+
+        // showing success message to the user
+        alert("Success!! Student " +
+            "" + registeredStudent.surname.toUpperCase() + " "
+            + registeredStudent.name.toUpperCase() + " was created " +
+            "(Average Score : " + registeredStudent.avgScore + ")!!")
+
+        // initializing student object
+        registeredStudent = new student();
+
+        // changing button value
+        document.getElementById('register').innerHTML = "Add another user";
+
+        // changing message on Result
+        document.getElementById('result').innerHTML = " New Student Added! Click display for details!!"
+
+        // reseting the form values
+        const element = document.getElementById("studentForm");
+        element.reset()
+
+        // return false so as not to reload the whole html page
+        return false;
+    }
+
+    // Helper fuctions for setting immediately the property values of student onBlur
+    function passNameValue(name) {
+        registeredStudent.name = name.value;
+    }
+
+    function passSurnameValue(surname) {
+        registeredStudent.surname = surname.value;
+    }
+
+    function passMathsValue(maths) {
+        registeredStudent.maths = maths.value;
+    }
+
+    function passCValue(c) {
+        registeredStudent.c = c.value;
+    }
+
+    function passJSValue(js) {
+        registeredStudent.js = js.value;
+    }
+
+    function passJavaValue(java) {
+        registeredStudent.java = java.value;
+    }
+
+    function displayStudents() {
+        if (studentArray.length === 0) {
+            alert("Nothing to show, yet!!");
+            return false;
+        }
+        let i;
+        let stringResult = "";
+        for (i = 0; i < studentArray.length; i++) {
+            stringResult = stringResult + (i + 1) + ". "
+                + studentArray[i].name.toUpperCase() + " "
+                + studentArray[i].surname.toUpperCase() + " with average score: "
+                + studentArray[i].avgScore + ".<br>";
+        }
+        document.getElementById("result").innerHTML = stringResult;
+        return false;
+    }
+
+    //rendering the welcomeDiv and the mainDiv
+    function closeDialog() {
+        document.getElementById("welcomeDiv").style.display = "none";
+        document.getElementById("mainDiv").style.display = "block";
+        alert("Welcome!!")
+        return false;
+    }
+</script>
+
+</body>
+
+</html>
